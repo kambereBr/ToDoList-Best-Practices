@@ -1,9 +1,19 @@
 const localData = window.localStorage;
+const OPERATION = {
+  ALL: 'ALL',
+  ONE: 'ONE',
+};
+const UPDATE = {
+  STATUS: 'completed',
+  DESCRIPTION: 'description',
+};
 
-function Task(description, completed, index) {
-  this.description = description;
-  this.completed = completed;
-  this.index = index;
+class Task {
+  constructor(description, completed, index) {
+    this.description = description;
+    this.completed = completed;
+    this.index = index;
+  }
 }
 
 const updateLocalStorage = (data) => {
@@ -20,42 +30,24 @@ const addTask = (tasks, description) => {
   updateLocalStorage(tasks);
 };
 
-const deleteTask = (tasks, taskIndex) => {
-  if (tasks.length === 1) {
-    tasks = [];
-  } else {
-    tasks.splice(taskIndex - 1, 1);
-    for (let i = 0; i < tasks.length; i += 1) {
-      tasks[i].index = i + 1;
-    }
-  }
-  updateLocalStorage(tasks);
-};
-
 const filterTask = (tasks) => tasks.completed === false;
-
-const clearAllCompleted = (tasks) => {
-  if (tasks.length === 1) {
-    tasks = [];
-  } else {
-    tasks = tasks.filter(filterTask);
-    for (let i = 0; i < tasks.length; i += 1) {
-      tasks[i].index = i + 1;
-    }
+const deleteTasks = (operation, tasks = [], taskIndex = 1) => {
+  if (operation === OPERATION.ALL) {
+    tasks = (tasks.length === 1) ? [] : tasks.filter(filterTask);
+  } else if (operation === OPERATION.ONE) {
+    tasks = tasks.length === 1 ? [] : tasks.splice(taskIndex - 1, 1);
   }
-  updateLocalStorage(tasks);
-};
-
-const editTaskDescription = (tasks, taskIndex, description) => {
-  tasks[taskIndex - 1].description = description;
+  tasks.forEach((item, index) => {
+    item.index = index + 1;
+  });
   updateLocalStorage(tasks);
 };
 
 export {
   addTask,
-  deleteTask,
-  editTaskDescription,
+  UPDATE,
   localData,
-  clearAllCompleted,
+  deleteTasks,
   updateLocalStorage,
+  OPERATION,
 };

@@ -2,9 +2,9 @@ import {
   updateLocalStorage,
 } from './utils.js';
 
-const editTastkStatus = (tasks, taskIndex, status) => {
-  tasks[taskIndex - 1].completed = status;
+const editTask = (tasks, taskIndex, field, value) => {
+  tasks[taskIndex - 1][field] = value;
   updateLocalStorage(tasks);
 };
 
-export default editTastkStatus;
+export default editTask;
