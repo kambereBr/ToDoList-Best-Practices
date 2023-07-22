@@ -6,6 +6,8 @@ $box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
 $font: 'Roboto', sans-serif;
 $gray-color: #545862;
 $gray-footer-color: #e9e9e9;
+$yellow-color: #f7ef8c;
+$white-color: #f4f4f4;
 
 * {
   box-sizing: border-box;
@@ -34,14 +36,13 @@ a,
 .item-description {
   border: none;
   background-color: white;
-  // width: 300px;
+  outline: none;
 }
 
 .container {
   background-color: white;
   box-shadow: $box-shadow;
   text-align: center;
-  width: 40%;
 }
 
 .list-header-container {
@@ -133,4 +134,10 @@ hr {
   border: none;
   background: rgb(231, 230, 230);
   height: 1px;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    width: 40%;
+  }
 }

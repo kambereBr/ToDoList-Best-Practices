@@ -5,12 +5,12 @@ import iconMore from './assets/icons8_menu_vertical_20px.png';
 import iconDelete from './assets/icons8_trash_20px.png';
 import {
   addTask,
-  deleteTask,
-  editTaskDescription,
+  deleteTasks,
   localData,
-  clearAllCompleted,
+  OPERATION,
+  UPDATE,
 } from './utils.js';
-import editTastkStatus from './updateAction.js';
+import editTask from './updateAction.js';
 
 const imageRefresh = document.getElementById('refresh-img');
 imageRefresh.src = iconRefresh;
@@ -32,10 +32,11 @@ function cleanSelected() {
     const moreImg = document.getElementById(`more-img-${items.id}`);
 
     element.disabled = true;
-    container.style.background = 'none';
-    element.style.background = '#ffff';
-    element.style.outline = '#ffff';
     moreImg.src = iconMore;
+    items.addEventListener('blur', () => {
+      element.style.background = '#ffff';
+      container.style.background = 'white';
+    });
   });
 }
 
@@ -84,6 +85,7 @@ function renderList() {
       li.addEventListener('click', () => {
         cleanSelected();
         li.style.background = '#f7ef8c';
+        inputDescript.style.background = '#f7ef8c';
         inputDescript.disabled = false;
         inputDescript.focus();
         inputDescript.style.outline = '#f7ef8c';
@@ -92,21 +94,21 @@ function renderList() {
       });
 
       imgBtn.addEventListener('click', () => {
-        deleteTask(myData, item.index);
+        deleteTasks(OPERATION.ONE, myData, item.index);
         renderList();
       });
 
       inputDescript.addEventListener('keypress', (event) => {
         if (event.key === 'Enter' && inputDescript !== '') {
           // update data
-          editTaskDescription(myData, inputDescript.id, inputDescript.value);
+          editTask(myData, inputDescript.id, UPDATE.DESCRIPTION, inputDescript.value);
           renderList();
         }
       });
 
       inputCheck.addEventListener('change', () => {
         const completed = !!inputCheck.checked;
-        editTastkStatus(myData, item.index, completed);
+        editTask(myData, item.index, UPDATE.STATUS, completed);
       });
 
       divChkBtn.appendChild(inputCheck);
@@ -135,7 +137,7 @@ addField.addEventListener('keypress', (event) => {
 // clear all completed tasks
 clearBtn.addEventListener('click', () => {
   if (window.confirm('Do you want to clear all completed tasks ?') === true) {
-    clearAllCompleted(myData);
+    deleteTasks(OPERATION.ALL, myData);
     renderList();
   }
 });
